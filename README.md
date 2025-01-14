@@ -1,6 +1,6 @@
 # Quickyearning_Backend_Django
 
-Run these command prompt of project directory:<br>
+Run these in command prompt of project directory:<br>
 `pip install django`<br>
 `pip install djangorestframework`<br>
 `pip install django-cors-headers`<br>
