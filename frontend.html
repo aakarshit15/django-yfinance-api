@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -95,3 +96,102 @@
     <pre id="calendar">Loading calendar data...</pre>
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Data Fetcher</title>
+    <script>
+        // Function to fetch balance sheet
+        async function fetchBalanceSheet(ticker) {
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/api/get_balance_sheet/${ticker}/`);
+                const data = await response.json();
+                console.log("Balance Sheet Data: ", data);
+                document.getElementById("balanceSheet").textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                console.error('Error fetching balance sheet:', error);
+            }
+        }
+
+        // Function to fetch cash flow data
+        async function fetchCashFlow(ticker) {
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/api/get_cash_flow/${ticker}/`);
+                const data = await response.json();
+                console.log("Cash Flow Data: ", data);
+                document.getElementById("cashFlow").textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                console.error('Error fetching cash flow:', error);
+            }
+        }
+
+        // Function to fetch historical data
+        async function fetchHistoricalData(ticker) {
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/api/get_historical_data/${ticker}/`);
+                const data = await response.json();
+                console.log("Historical Data: ", data);
+                document.getElementById("historicalData").textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                console.error('Error fetching historical data:', error);
+            }
+        }
+
+        // Function to fetch sector and industry data
+        async function fetchSectorAndIndustry(ticker) {
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/api/get_sector_and_industry/${ticker}/`);
+                const data = await response.json();
+                console.log("Sector and Industry Data: ", data);
+                document.getElementById("sectorAndIndustry").textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                console.error('Error fetching sector and industry:', error);
+            }
+        }
+
+        // Function to fetch calendar data
+        async function fetchCalendar(ticker) {
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/api/get_calendar/${ticker}/`);
+                const data = await response.json();
+                console.log("Calendar Data: ", data);
+                document.getElementById("calendar").textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                console.error('Error fetching calendar:', error);
+            }
+        }
+
+        // Call the functions on page load
+        window.onload = () => {
+            const ticker = "RELIANCE.NS";  // Change this to the desired ticker
+            fetchBalanceSheet(ticker);
+            fetchCashFlow(ticker);
+            fetchHistoricalData(ticker);
+            fetchSectorAndIndustry(ticker);
+            fetchCalendar(ticker);
+        };
+    </script>
+</head>
+<body>
+    <h1>Financial Data for RELIANCE.NS</h1>
+
+    <h2>Balance Sheet:</h2>
+    <pre id="balanceSheet">Loading balance sheet data...</pre>
+
+    <h2>Cash Flow:</h2>
+    <pre id="cashFlow">Loading cash flow data...</pre>
+
+    <h2>Historical Data:</h2>
+    <pre id="historicalData">Loading historical data...</pre>
+
+    <h2>Sector and Industry:</h2>
+    <pre id="sectorAndIndustry">Loading sector and industry data...</pre>
+
+    <h2>Calendar:</h2>
+    <pre id="calendar">Loading calendar data...</pre>
+</body>
+</html>
+>>>>>>> ba1e14a2ddc3e37d91e4f9402d5cb740edd0c580
