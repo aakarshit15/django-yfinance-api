@@ -17,8 +17,8 @@ To start the django server, run this command in terminal of the django_backend d
 ### Documentation to fetch api
 
 - Balance Sheet<br>
-link/api/get_balance_sheet/<ticker_symbol><br>
-Example: link/api/get_balance_sheet/RELIANCE.NS<br>
+`link/api/get_balance_sheet/<ticker_symbol><br>`
+Example: `link/api/get_balance_sheet/RELIANCE.NS`<br>
 
 - Cash Flow<br>
 link/api/get_cash_flow/<ticker_symbol><br>
