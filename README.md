@@ -23,3 +23,7 @@ Example: `link/api/get_balance_sheet/RELIANCE.NS`<br>
 - Cash Flow<br>
 Link: `link/api/get_cash_flow/<ticker_symbol>`<br>
 Example: `link/api/get_get_flow/RELIANCE.NS`<br>
+
+- Historical Data<br>
+Link: `link/api/get_historical_data/<ticker_symbol>`<br>
+Example: `link/api/get_historical_data/RELIANCE.NS`<br>
