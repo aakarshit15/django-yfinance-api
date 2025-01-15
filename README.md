@@ -37,46 +37,14 @@ Only following combinations work:<br>
     <tbody>
         <tr>
             <td>1d</td>
-            <td>1m</td>
-        </tr>
-        <tr>
-            <td>1d</td>
-            <td>5m</td>
-        </tr>
-        <tr>
-            <td>1d</td>
-            <td>15m</td>
-        </tr>
-        <tr>
-            <td>1d</td>
-            <td>30m</td>
-        </tr>
-        <tr>
-            <td>1d</td>
-            <td>1d</td>
+            <td>1m, 5m, 15m, 30m, 1d</td>
         </tr>
         <tr>
             <td>1mo</td>
-            <td>5m</td>
-        </tr>
-        <tr>
-            <td>1mo</td>
-            <td>15m</td>
-        </tr>
-        <tr>
-            <td>1mo</td>
-            <td>30m</td>
-        </tr>
-        <tr>
-            <td>1mo</td>
-            <td>1d</td>
-        </tr>
-        <tr>
-            <td>1mo</td>
-            <td>1mo</td>
+            <td>5m, 15m, 30m, 1d, 1mo</td>
         </tr>
     </tbody>
-</table>
+</table><br>
 Example: `http://127.0.0.1:8000/api/get_historical_data/RELIANCE.NS/?interval=1d&period=1mo`<br>
 
 - Sector and Industry Information<br>
