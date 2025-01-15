@@ -45,5 +45,10 @@ def get_sector_and_industry(request, ticker):
 
 @api_view(["GET"])
 def get_calendar(request, ticker):
-    final_json_file = get_calendar_as_json(ticker)
-    return Response(final_json_file)
+    # final_json_file = get_calendar_as_json(ticker)
+    # return Response(final_json_file)
+    try:
+        final_json_file = get_calendar_as_json(ticker)
+        return Response(final_json_file)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)

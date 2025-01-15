@@ -15,14 +15,26 @@ def convert_timestamps_to_strings(data):
 def convert_timestamp_to_string(timestamp):
     return timestamp.strftime("%Y-%m-%d %H:%M:%S") if isinstance(timestamp, (datetime, pd.Timestamp)) else str(timestamp)
 
+# def convert_data_to_json(data):
+#     if data is not None:
+#         data_dict = data.to_dict()
+#         data_dict = convert_timestamps_to_strings(data_dict)
+#         data_json = json.dumps(data_dict, indent=4)
+#     else:
+#         data_json = json.dumps({"error": "No data available"}, indent=4)
+#     return data_json
+
 def convert_data_to_json(data):
-    if data is not None:
+    if isinstance(data, pd.DataFrame):  # Handle DataFrames
         data_dict = data.to_dict()
-        data_dict = convert_timestamps_to_strings(data_dict)
-        data_json = json.dumps(data_dict, indent=4)
-    else:
-        data_json = json.dumps({"error": "No data available"}, indent=4)
-    return data_json
+    elif isinstance(data, dict):  # Already a dictionary
+        data_dict = data
+    else:  # Handle unsupported types
+        return json.dumps({"error": "Unsupported data type"}, indent=4)
+
+    # Convert timestamps to strings
+    data_dict = convert_timestamps_to_strings(data_dict)
+    return json.dumps(data_dict, indent=4)
 
 def convert_to_json(data):
     if isinstance(data, dict):  # Handle dictionaries
@@ -85,14 +97,28 @@ def get_sector_and_industry(tickers, **kwargs):
     return convert_to_json(result) if len(result) > 1 else convert_to_json(result[tickers[0]])
 
 # Function to fetch calendar data for single ticker
+# def get_calendar_as_json(ticker_symbol, **kwargs):
+#     try:
+#         my_data = yf.Ticker(ticker_symbol)
+#         my_calendar = my_data.calendar
+#         calendar_json = convert_data_to_json(my_calendar)
+#         return calendar_json
+#     except Exception as e:
+#         return json.dumps({"error": str(e)}, indent=4)
 def get_calendar_as_json(ticker_symbol, **kwargs):
     try:
         my_data = yf.Ticker(ticker_symbol)
-        my_calendar = my_data.calendar
-        calendar_json = convert_data_to_json(my_calendar)
+        my_calendar = my_data.calendar  # Typically a dictionary
+
+        if isinstance(my_calendar, dict):  # Directly convert if it's a dictionary
+            calendar_json = convert_data_to_json(my_calendar)
+        else:
+            raise ValueError("Unexpected data format for calendar")
+
         return calendar_json
     except Exception as e:
         return json.dumps({"error": str(e)}, indent=4)
+
 
 # Example usage
 if __name__ == "__main__":
