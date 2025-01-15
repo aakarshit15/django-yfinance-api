@@ -27,18 +27,56 @@ Example: `http://127.0.0.1:8000/api/get_get_flow/RELIANCE.NS`<br>
 - Historical Data<br>
 Link: `server_link/api/get_historical_data/<ticker_symbol>/?interval=<interval>&period=<interval>`<br>
 Only following combinations work:<br>
-| Period  | Interval |
-| ------- | -------- |
-| 1d      | 1m       |
-| 1d      | 5m       |
-| 1d      | 15m      |
-| 1d      | 30m      |
-| 1d      | 1d       |
-| 1mo     | 5m       |
-| 1mo     | 15m      |
-| 1mo     | 30m      |
-| 1mo     | 1d       |
-| 1mo     | 1mo      |<br>
+<table>
+    <thead>
+        <tr>
+            <th>Period</th>
+            <th>Interval</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>1d</td>
+            <td>1m</td>
+        </tr>
+        <tr>
+            <td>1d</td>
+            <td>5m</td>
+        </tr>
+        <tr>
+            <td>1d</td>
+            <td>15m</td>
+        </tr>
+        <tr>
+            <td>1d</td>
+            <td>30m</td>
+        </tr>
+        <tr>
+            <td>1d</td>
+            <td>1d</td>
+        </tr>
+        <tr>
+            <td>1mo</td>
+            <td>5m</td>
+        </tr>
+        <tr>
+            <td>1mo</td>
+            <td>15m</td>
+        </tr>
+        <tr>
+            <td>1mo</td>
+            <td>30m</td>
+        </tr>
+        <tr>
+            <td>1mo</td>
+            <td>1d</td>
+        </tr>
+        <tr>
+            <td>1mo</td>
+            <td>1mo</td>
+        </tr>
+    </tbody>
+</table>
 Example: `http://127.0.0.1:8000/api/get_historical_data/RELIANCE.NS/?interval=1d&period=1mo`<br>
 
 - Sector and Industry Information<br>
