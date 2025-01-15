@@ -55,10 +55,45 @@ def get_sector_and_industry(request, ticker):
     except Exception as e:
         return Response({"error": str(e)}, status=500)
 
+# @api_view(["GET"])
+# def get_calendar(request, ticker):
+#     try:
+#         final_json_file = get_calendar_as_json(ticker)
+#         return Response(final_json_file)
+#     except Exception as e:
+#         return Response({"error": str(e)}, status=500)
+
+
+from datetime import date
+
+class DateEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, date):
+            return obj.isoformat()
+        return super().default(obj)
+
+# @api_view(["GET"])
+# def get_calendar(request, ticker):
+#     try:
+#         calendar_data = get_calendar_as_json(ticker)
+#         # Parse the JSON string to convert it to a Python object
+#         calendar_dict = json.loads(calendar_data)
+#         return Response(calendar_dict)
+#     except Exception as e:
+#         return Response({"error": str(e)}, status=500)
+
+
 @api_view(["GET"])
 def get_calendar(request, ticker):
     try:
-        final_json_file = get_calendar_as_json(ticker)
-        return Response(final_json_file)
+        my_data = yf.Ticker(ticker)
+        calendar_data = my_data.calendar
+        
+        if calendar_data is None:
+            return Response({"error": "No calendar data available"})
+            
+        # Use the custom encoder to handle date objects
+        return Response(json.loads(json.dumps(calendar_data, cls=DateEncoder)))
+        
     except Exception as e:
         return Response({"error": str(e)}, status=500)

@@ -43,17 +43,17 @@ def convert_to_json(data):
 
     return json.dumps(data, indent=4)
 
-def convert_dates_to_strings(data):
-    if isinstance(data, dict):
-        return {key: convert_dates_to_strings(value) for key, value in data.items()}
-    elif isinstance(data, list):
-        return [convert_dates_to_strings(item) for item in data]
-    elif isinstance(data, (datetime.datetime, pd.Timestamp)):
-        return data.strftime("%Y-%m-%d %H:%M:%S")
-    elif isinstance(data, datetime.date):
-        return data.strftime("%Y-%m-%d")
-    else:
-        return data
+# def convert_dates_to_strings(data):
+#     if isinstance(data, dict):
+#         return {key: convert_dates_to_strings(value) for key, value in data.items()}
+#     elif isinstance(data, list):
+#         return [convert_dates_to_strings(item) for item in data]
+#     elif isinstance(data, (datetime, pd.Timestamp)):
+#         return data.strftime("%Y-%m-%d %H:%M:%S")
+#     elif isinstance(data, datetime.date):
+#         return data.strftime("%Y-%m-%d")
+#     else:
+#         return data
 
 # Function to fetch balance sheet as JSON for single ticker
 def get_balance_sheet_as_json(ticker_symbol, **kwargs):
@@ -101,21 +101,95 @@ def get_sector_and_industry(tickers, **kwargs):
     return convert_to_json(result) if len(result) > 1 else convert_to_json(result[tickers[0]])
 
 # Function to fetch calendar data for a single ticker
+# def get_calendar_as_json(ticker_symbol):
+#     try:
+#         my_data = yf.Ticker(ticker_symbol)
+#         my_calendar = my_data.calendar  # Typically a dictionary
+
+#         if isinstance(my_calendar, dict):  # Directly convert if it's a dictionary
+#             # Convert all datetime/date objects to strings in the calendar dictionary
+#             my_calendar = convert_dates_to_strings(my_calendar)
+#             calendar_json = json.dumps(my_calendar, indent=4)
+#         else:
+#             raise ValueError("Unexpected data format for calendar")
+
+#         return calendar_json
+#     except Exception as e:
+#         return json.dumps({"error": str(e)}, indent=4)
+
+# def get_calendar_as_json(ticker_symbol):
+    try:
+        my_data = yf.Ticker(ticker_symbol)
+        my_calendar = my_data.calendar
+
+        # Handle the case where calendar might be None
+        if my_calendar is None:
+            return json.dumps({"error": "No calendar data available"}, indent=4)
+
+        # Ensure my_calendar is a dictionary before processing
+        if not isinstance(my_calendar, dict):
+            return json.dumps({"error": "Unexpected calendar data format"}, indent=4)
+
+        # Convert all datetime/date objects to strings in the calendar dictionary
+        converted_calendar = convert_dates_to_strings(my_calendar)
+        return json.dumps(converted_calendar, indent=4)
+
+    except Exception as e:
+        return json.dumps({"error": str(e)}, indent=4)
+
+# Updated convert_dates_to_strings function for better type checking
+# def convert_dates_to_strings(data):
+    if data is None:
+        return None
+    if isinstance(data, dict):
+        return {key: convert_dates_to_strings(value) for key, value in data.items()}
+    if isinstance(data, list):
+        return [convert_dates_to_strings(item) for item in data]
+    if isinstance(data, (datetime, pd.Timestamp)):
+        return data.strftime("%Y-%m-%d %H:%M:%S")
+    if isinstance(data, datetime.date):
+        return data.strftime("%Y-%m-%d")
+    return data
+
+
+# In your yf_fetch.py
 def get_calendar_as_json(ticker_symbol):
     try:
         my_data = yf.Ticker(ticker_symbol)
-        my_calendar = my_data.calendar  # Typically a dictionary
+        my_calendar = my_data.calendar
 
-        if isinstance(my_calendar, dict):  # Directly convert if it's a dictionary
-            # Convert all datetime/date objects to strings in the calendar dictionary
-            my_calendar = convert_dates_to_strings(my_calendar)
-            calendar_json = json.dumps(my_calendar, indent=4)
-        else:
-            raise ValueError("Unexpected data format for calendar")
+        # Handle the case where calendar might be None
+        if my_calendar is None:
+            return json.dumps({"error": "No calendar data available"}, indent=4)
 
-        return calendar_json
+        # Convert the calendar data to a dictionary if it isn't already
+        if hasattr(my_calendar, 'to_dict'):
+            my_calendar = my_calendar.to_dict()
+        elif not isinstance(my_calendar, dict):
+            return json.dumps({"error": "Unexpected calendar data format"}, indent=4)
+
+        # Convert timestamps to strings
+        converted_calendar = convert_timestamps_to_strings(my_calendar)
+        return json.dumps(converted_calendar, indent=4)
+
     except Exception as e:
         return json.dumps({"error": str(e)}, indent=4)
+    
+
+def convert_timestamps_to_strings(data):
+    if isinstance(data, dict):
+        return {str(key): convert_timestamps_to_strings(value) for key, value in data.items()}
+    elif isinstance(data, list):
+        return [convert_timestamps_to_strings(item) for item in data]
+    elif isinstance(data, (datetime, pd.Timestamp)):
+        return data.strftime("%Y-%m-%d %H:%M:%S")
+    elif isinstance(data, pd.Series):
+        return data.to_dict()
+    elif isinstance(data, pd.DataFrame):
+        return data.to_dict()
+    else:
+        return data
+
 
 # Example usage
 if __name__ == "__main__":
@@ -150,3 +224,5 @@ if __name__ == "__main__":
     # # Calendar information for single ticker
     # print("\nCalendar Information for Single Ticker:")
     # print(get_calendar_as_json(single_ticker))
+
+
