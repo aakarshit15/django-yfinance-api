@@ -25,8 +25,18 @@ Link: `server_link/api/get_cash_flow/<ticker_symbol>`<br>
 Example: `http://127.0.0.1:8000/api/get_get_flow/RELIANCE.NS`<br>
 
 - Historical Data<br>
-Link: `server_link/api/get_historical_data/<ticker_symbol>`<br>
-Example: `http://127.0.0.1:8000/api/get_historical_data/RELIANCE.NS`<br>
+Link: `server_link/api/get_historical_data/<ticker_symbol>/?interval=<interval>&period=<interval>`<br>
+Only following combinations work:<br>
+period=1d  interval=1m<br>
+period=1d  interval=5m<br>
+period=1d  interval=15m<br>
+period=1d  interval=30m<br>
+period=1d  interval=1d<br>
+period=1mo interval=5m<br>
+period=1mo interval=15m<br>
+period=1mo interval=30m<br>
+period=1mo interval=1d<br>
+Example: `http://127.0.0.1:8000/api/get_historical_data/RELIANCE.NS/?interval=1d&period=1mo`<br>
 
 - Sector and Industry Information<br>
 Link: `server_link/api/get_sector_and_industry/<ticker_symbol>`<br>
