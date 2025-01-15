@@ -26,9 +26,21 @@ def get_cash_flow(request, ticker):
 @api_view(["GET"])
 def get_historical_data(request, ticker):
     try:
-        data = yf.Ticker(ticker).history(period="max")
-        historical_data_json = json.loads(convert_to_json(data))
-        return Response(historical_data_json, status=200)
+        # Extract query parameters with defaults
+        period = request.query_params.get("period", "1mo")  # Default to '1mo'
+        interval = request.query_params.get("interval", "1d")  # Default to '1d'
+
+        # Fetch historical data using the utility function
+        historical_data = get_historical_data_with_kwargs(
+            tickers=ticker,
+            period=period,
+            interval=interval
+        )
+
+        # Convert JSON string to Python object for Response
+        historical_data_json = json.loads(historical_data)
+
+        return Response(historical_data_json)
     except Exception as e:
         return Response({"error": str(e)}, status=500)
 
@@ -45,8 +57,6 @@ def get_sector_and_industry(request, ticker):
 
 @api_view(["GET"])
 def get_calendar(request, ticker):
-    # final_json_file = get_calendar_as_json(ticker)
-    # return Response(final_json_file)
     try:
         final_json_file = get_calendar_as_json(ticker)
         return Response(final_json_file)

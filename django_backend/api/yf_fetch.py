@@ -15,15 +15,6 @@ def convert_timestamps_to_strings(data):
 def convert_timestamp_to_string(timestamp):
     return timestamp.strftime("%Y-%m-%d %H:%M:%S") if isinstance(timestamp, (datetime, pd.Timestamp)) else str(timestamp)
 
-# def convert_data_to_json(data):
-#     if data is not None:
-#         data_dict = data.to_dict()
-#         data_dict = convert_timestamps_to_strings(data_dict)
-#         data_json = json.dumps(data_dict, indent=4)
-#     else:
-#         data_json = json.dumps({"error": "No data available"}, indent=4)
-#     return data_json
-
 def convert_data_to_json(data):
     if isinstance(data, pd.DataFrame):  # Handle DataFrames
         data_dict = data.to_dict()
@@ -52,6 +43,18 @@ def convert_to_json(data):
 
     return json.dumps(data, indent=4)
 
+def convert_dates_to_strings(data):
+    if isinstance(data, dict):
+        return {key: convert_dates_to_strings(value) for key, value in data.items()}
+    elif isinstance(data, list):
+        return [convert_dates_to_strings(item) for item in data]
+    elif isinstance(data, (datetime.datetime, pd.Timestamp)):
+        return data.strftime("%Y-%m-%d %H:%M:%S")
+    elif isinstance(data, datetime.date):
+        return data.strftime("%Y-%m-%d")
+    else:
+        return data
+
 # Function to fetch balance sheet as JSON for single ticker
 def get_balance_sheet_as_json(ticker_symbol, **kwargs):
     try:
@@ -72,8 +75,9 @@ def get_cash_flow_as_json(ticker_symbol, **kwargs):
     except Exception as e:
         return json.dumps({"error": str(e)}, indent=4)
 
-# Function to fetch historical data for single or multiple tickers
-def get_historical_data(tickers, **kwargs):
+# Function to fetch historical data for single ticker with parameters
+def get_historical_data_with_kwargs(tickers, **kwargs):
+    """Fetch historical data for single or multiple tickers with additional parameters."""
     if isinstance(tickers, str):
         tickers = [tickers]
 
@@ -96,29 +100,22 @@ def get_sector_and_industry(tickers, **kwargs):
         result[ticker] = {"sector": sector, "industry": industry}
     return convert_to_json(result) if len(result) > 1 else convert_to_json(result[tickers[0]])
 
-# Function to fetch calendar data for single ticker
-# def get_calendar_as_json(ticker_symbol, **kwargs):
-#     try:
-#         my_data = yf.Ticker(ticker_symbol)
-#         my_calendar = my_data.calendar
-#         calendar_json = convert_data_to_json(my_calendar)
-#         return calendar_json
-#     except Exception as e:
-#         return json.dumps({"error": str(e)}, indent=4)
-def get_calendar_as_json(ticker_symbol, **kwargs):
+# Function to fetch calendar data for a single ticker
+def get_calendar_as_json(ticker_symbol):
     try:
         my_data = yf.Ticker(ticker_symbol)
         my_calendar = my_data.calendar  # Typically a dictionary
 
         if isinstance(my_calendar, dict):  # Directly convert if it's a dictionary
-            calendar_json = convert_data_to_json(my_calendar)
+            # Convert all datetime/date objects to strings in the calendar dictionary
+            my_calendar = convert_dates_to_strings(my_calendar)
+            calendar_json = json.dumps(my_calendar, indent=4)
         else:
             raise ValueError("Unexpected data format for calendar")
 
         return calendar_json
     except Exception as e:
         return json.dumps({"error": str(e)}, indent=4)
-
 
 # Example usage
 if __name__ == "__main__":
@@ -138,9 +135,9 @@ if __name__ == "__main__":
     # print("\nHistorical Data for Single Ticker:")
     # print(get_historical_data(single_ticker))
 
-    # # Historical data for multiple tickers
-    # print("\nHistorical Data for Multiple Tickers:")
-    # print(get_historical_data(multiple_tickers))
+    # # Historical data for single ticker with parameters
+    # print("\nHistorical Data for Single Ticker:")
+    # print(get_historical_data_with_kwargs(single_ticker, interval="1h", period="1mo"))
 
     # # Sector / Industry information for single ticker
     # print("\nSector and Industry Data for Single Ticker:")
