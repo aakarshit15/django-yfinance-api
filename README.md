@@ -27,7 +27,7 @@ Example: `http://127.0.0.1:8000/api/get_get_flow/RELIANCE.NS`<br>
 - Historical Data<br>
 Link: `server_link/api/get_historical_data/<ticker_symbol>/?interval=<interval>&period=<interval>`<br>
 Example: `http://127.0.0.1:8000/api/get_historical_data/RELIANCE.NS/?interval=1d&period=1mo`<br>
-Please Note: Only following combinations work:
+Please Note: Only following combinations work:<br>
 <table>
     <thead>
         <tr>
