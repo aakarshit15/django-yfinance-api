@@ -28,7 +28,7 @@ Example: `http://127.0.0.1:8000/api/get_get_flow/RELIANCE.NS`<br>
 Link: `server_link/api/get_historical_data/<ticker_symbol>/?interval=<interval>&period=<interval>`<br>
 Only following combinations work:<br>
 | Period | Interval |
-| — — — | — — — — — -|
+| — — — | — — — |
 | 1d | 1m |
 | 1d | 5m |
 | 1d | 15m |
